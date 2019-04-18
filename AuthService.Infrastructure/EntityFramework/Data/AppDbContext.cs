@@ -14,8 +14,9 @@ namespace AuthService.Infrastructure.EntityFramework.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AppUser>(ConfigureUser);
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AppUser>(ConfigureUser);
         }
 
         public void ConfigureUser(EntityTypeBuilder<AppUser> builder)

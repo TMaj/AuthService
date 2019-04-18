@@ -10,14 +10,14 @@ namespace AuthService.Infrastructure.Security
 {
     public sealed class JwtTokenFactory : IJwtTokenFactory
     {
-        private readonly IJwtTokenHandler _jwtTokenHandler;
-        private readonly JwtIssuerOptions _jwtOptions;
+        private readonly IJwtTokenHandler jwtTokenHandler;
+        private readonly JwtIssuerOptions jwtOptions;
 
         public JwtTokenFactory(IJwtTokenHandler jwtTokenHandler, IOptions<JwtIssuerOptions> jwtOptions)
         {
-            _jwtTokenHandler = jwtTokenHandler;
-            _jwtOptions = jwtOptions.Value;
-            ThrowIfInvalidOptions(_jwtOptions);
+            this.jwtTokenHandler = jwtTokenHandler;
+            this.jwtOptions = jwtOptions.Value;
+            ThrowIfInvalidOptions(this.jwtOptions);
         }
 
         public async Task<AccessToken> GenerateEncodedTokenAsync(string id, string userName)
@@ -27,22 +27,22 @@ namespace AuthService.Infrastructure.Security
             var claims = new[]
             {
                  new Claim(JwtRegisteredClaimNames.Sub, userName),
-                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
+                 new Claim(JwtRegisteredClaimNames.Jti, await jwtOptions.JtiGenerator()),
+                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id)
              };
 
             // Create the JWT security token and encode it.
             var jwt = new JwtSecurityToken(
-                _jwtOptions.Issuer,
-                _jwtOptions.Audience,
+                jwtOptions.Issuer,
+                jwtOptions.Audience,
                 claims,
-                _jwtOptions.NotBefore,
-                _jwtOptions.Expiration,
-                _jwtOptions.SigningCredentials);
+                jwtOptions.NotBefore,
+                jwtOptions.Expiration,
+                jwtOptions.SigningCredentials);
 
-            return new AccessToken(_jwtTokenHandler.WriteToken(jwt), (int)_jwtOptions.ValidFor.TotalSeconds);
+            return new AccessToken(jwtTokenHandler.WriteToken(jwt), (int)jwtOptions.ValidFor.TotalSeconds);
         }
 
         private static ClaimsIdentity GenerateClaimsIdentity(string id, string userName)

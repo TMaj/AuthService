@@ -18,7 +18,7 @@ namespace AuthService.Api.Controllers
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost("register")]
-        public async Task<IActionResult> Post([FromBody]CreateUserCommand command)
+        public async Task<IActionResult> Register([FromBody]CreateUserCommand command)
         {
             return await DispatchAsync(command);
         }

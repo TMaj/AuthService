@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace AuthService.Infrastructure.Commands.Handlers
 {
-    public class LoginUserHandler : ICommandHandler<ExtendedLoginUserCommand>
+    public class ExchangeRefreshTokenHandler : ICommandHandler<ExtendedRefreshTokenCommand>
     {
         private readonly IAuthService authService;
 
-        public LoginUserHandler(IAuthService authService)
+        public ExchangeRefreshTokenHandler(IAuthService authService)
         {
             this.authService = authService;
         }
 
-        public async Task<ContentResult> HandleAsync(ExtendedLoginUserCommand command)
-        {  
-            return (await authService.LoginAsync(command.Email, command.Username, command.Password, command.RemoteIpAddress))
-                                     .SerializeToResult();
+        public async Task<ContentResult> HandleAsync(ExtendedRefreshTokenCommand command)
+        {            
+            return (await this.authService.ExchangeRefreshToken(command.AccessToken, command.RefreshToken, command.SigningKey))
+                                          .SerializeToResult();
         }
     }
 }

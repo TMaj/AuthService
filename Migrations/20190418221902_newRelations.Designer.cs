@@ -3,14 +3,16 @@ using System;
 using AuthService.Infrastructure.EntityFramework.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AuthService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190418221902_newRelations")]
+    partial class newRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,7 +81,8 @@ namespace AuthService.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AppUserId");
+                    b.Property<string>("AppUserId")
+                        .IsRequired();
 
                     b.Property<DateTime>("Expires");
 
@@ -203,9 +206,10 @@ namespace AuthService.Infrastructure.Migrations
 
             modelBuilder.Entity("AuthService.Infrastructure.EntityFramework.RefreshToken", b =>
                 {
-                    b.HasOne("AuthService.Infrastructure.EntityFramework.AppUser", "AppUser")
+                    b.HasOne("AuthService.Infrastructure.EntityFramework.AppUser")
                         .WithMany("RefreshTokens")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
