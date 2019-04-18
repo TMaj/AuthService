@@ -1,7 +1,5 @@
 ﻿using AuthService.Infrastructure.Commands.Commands;
 using AuthService.Infrastructure.Commands.Interfaces;
-using AuthService.Infrastructure.EntityFramework;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -9,12 +7,9 @@ namespace AuthService.Api.Controllers
 {
     public class AccountController : ApiControllerBase
     {
-        private readonly UserManager<AppUser> userManager;
-
-        public AccountController(UserManager<AppUser> userManager, ICommandDispatcher commandDispatcher)
+        public AccountController( ICommandDispatcher commandDispatcher)
             : base(commandDispatcher)
         {
-            this.userManager = userManager;
         }
 
         /// <summary>

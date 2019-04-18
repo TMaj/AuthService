@@ -17,6 +17,8 @@ namespace AuthService.Infrastructure.IoC
         {
             builder.RegisterModule<CommandModule>();
             builder.RegisterModule<ServiceModule>();
+            builder.RegisterModule<SecurityModule>();
+            builder.RegisterModule<LoggingModule>();
         }
     }
 }

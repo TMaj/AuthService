@@ -10,5 +10,6 @@ namespace AuthService.Infrastructure.Services.Interfaces
         Task<AppUser> GetAsync(string id);
         Task<IEnumerable<AppUser>> BrowseAsync();
         Task<CreateUserResponse> CreateAsync(string email, string firstname, string lastname, string username, string password);
+        Task<LoginUserResponse> LoginAsync(string email, string username, string password, string remoteIpAddress);
     }
 }
