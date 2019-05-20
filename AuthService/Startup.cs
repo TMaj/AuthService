@@ -95,9 +95,22 @@ namespace AuthService
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
+            }); 
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("webapp",
+                corsBuilder =>
+                {
+                    corsBuilder.WithOrigins()
+                                .AllowAnyOrigin()                                
+                                .AllowAnyHeader()
+                                .AllowAnyMethod()
+                                .AllowCredentials();
+                });
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSwaggerGen(c =>
             {
@@ -140,6 +153,8 @@ namespace AuthService
                 c.RoutePrefix = string.Empty;
             });
 
+
+            app.UseCors("webapp");
             app.UseSwagger();
             app.UseAuthentication();
             app.UseMvc();
